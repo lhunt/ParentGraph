@@ -13,34 +13,51 @@ public class grid extends Component
 {
    
    BufferedImage gridBack;      
-   int newpixel = 19;
+  
    
-   
+   JFrame frame = new JFrame("Parent Graph");
+
    public void paint(Graphics g)
    {
-         
+         //Make the tic marks 20 apart
+         frame.setSize(400,400);
+         int newpixelX = getWidth()/20;
+         System.out.println(newpixelX);
+         System.out.println(getWidth());
+         int newpixelY = getHeight()/20;
+         int width = getWidth();
+         int height = getHeight();
          Graphics2D g2 = (Graphics2D) g;
-                  
-         g.drawImage(gridBack,0,0,null);
-         // 382/20 = roughly 19 so each pixel is going to count as 19
+         //int remainderW = width%15;
+         //int remainderH = height%15;
          
-         int width = gridBack.getWidth();
-         int height = gridBack.getHeight();
-         //Draw the oridinal and abscissa
+        // if(remainderH  0) height = height - remainderH;
+        // if(remainderW != 0) width = width - remainderW;
+        // frame.setSize(width,height);   
+         //g.drawImage(gridBack,0,0,null);
+         // 382/20 = roughly 19 so each pixel is going to count as 19
+         g2.setStroke(new BasicStroke(1));
+         for(int v = 0; v < width; v+=newpixelX)
+          g2.draw(new Line2D.Double(v,height,v,0));
+         for(int h = 0; h < height; h+=newpixelY)
+          g2.draw(new Line2D.Double(0,h,width,h));
+         
+         
+         
          g2.setStroke(new BasicStroke(3));
          g2.draw(new Line2D.Double(0,height/2,width,height/2));
          g2.draw(new Line2D.Double(width/2,0,width/2,height));
 
          
          g2.setStroke(new BasicStroke(4));
-         for(int i = -newpixel; i < newpixel; i++)
+         for(int i = -newpixelX; i < newpixelX; i++)
          {
             
             g2.setColor(Color.blue);
-            int x = width/2 + (i-1)*newpixel;
-            int y = height/2 - (f(i - 1))*newpixel;
-            int nextx = width/2 + i*newpixel;
-            int nexty = height/2 - f(i)*newpixel;
+            int x = width/2 + (i-1)*newpixelX;
+            int y = height/2 - (f(i - 1))*newpixelY;
+            int nextx = width/2 + i*newpixelX;
+            int nexty = height/2 - f(i)*newpixelY;
             g2.draw(new Line2D.Double(x,y,nextx,nexty));
           
             g.setColor(Color.red);
@@ -49,12 +66,16 @@ public class grid extends Component
          }
     
    }
+   public grid()
+   {
+      
    
+   }
    public int f(int x)
    {
-      return x*x;
+      return Math.abs(x);
    }
-   //Show the grid
+   /*Show the grid
    public grid() 
     {
        try 
@@ -70,32 +91,26 @@ public class grid extends Component
         if (gridBack == null) 
              return new Dimension(200,200);
         else 
-           return new Dimension(gridBack.getWidth(null), gridBack.getHeight(null));
+           return new Dimension(gridBack.width(null), gridBack.height(null));
        
     }
  
- 
-  //Plot some points  
-  //Create Point2D.Double
-  
-  //Point2D.Double point = new Point2D.Double(x, y);   
-
- 
-   
+   */
  
 public static void main(String[] args) {
  
-        JFrame f = new JFrame("Parent Graph");
-             
-        f.addWindowListener(new WindowAdapter(){
+         grid g = new grid();           
+        g.frame.addWindowListener(new WindowAdapter(){
                 public void windowClosing(WindowEvent e) {
                     System.exit(0);
                 }
             });
  
-        f.add(new grid());
-        f.pack();
-        f.setVisible(true);
+        //g.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        g.frame.add(g);
+       // g.frame.pack();
+        g.frame.setSize(100,100);
+        g.frame.setVisible(true);
     }
 
 }
